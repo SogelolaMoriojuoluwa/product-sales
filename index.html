@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="asset/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+    <style>
+        body{
+            background-color: #F3F4F6;
+        }
+       
+        nav{
+            background-color:#1E3A8A;
+        }
+        .navbar-brand{
+            color: #FDE68A;
+            font-weight: bold;
+            font-family: "Poppins", serif;
+            
+        }
+        .navbar-brand:hover{
+            color: #FDE68A;
+        }
+        .input-box{
+            /* width: 400px; */
+            font-family: "Poppins", serif;
+        }
+        .btn{      
+           color: #fff;
+            background-color: #F59E0B;
+            font-family: "Poppins", serif;
+        }
+        
+        .btn:hover{
+            cursor: pointer;
+            background-color: #FDE68A;
+        }
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            color: #F59E0B;
+        }
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -25px;
+            background: #F59E0B;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            display: none;
+        }
+        
+        .card:hover{
+            cursor: pointer;
+        }
+        .card> img{
+            width: 230px;
+            height: 230px;
+           
+        }
+        .card> h6{
+            color: #1F2937;
+            font-family: "Atkinson Hyperlegible Next", serif;
+        }
+        .card> p{
+            color: #F59E0B;
+            font-family: "Atkinson Hyperlegible Next", serif;
+        }
+        .cart-btn{
+            width: 100%;
+            background-color: #1E3A8A;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+        }
+        .cart-btn:hover{
+            background-color: #FDE68A;
+        }
+       
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.3);
+            transition: right 0.3s ease-in-out;
+            padding: 20px;
+            overflow-y: auto;
+            font-family: "Atkinson Hyperlegible Next", serif;
+        }
+        .cart-sidebar.show {
+            right: 0;
+        }
+        .close-cart {
+            cursor: pointer;
+            font-size: 20px;
+            float: right;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #1F2937;
+
+        }
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+          
+        }
+        .cart-item p{
+            color: #F59E0B;
+            font-family: "Atkinson Hyperlegible Next", serif;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg py-3">
+        <div class="container d-flex justify-content-between ">
+            <div>
+                <a href="#" class="navbar-brand">Shopping</a>
+            </div>
+               <div class="input-box d-flex">
+                <input class="form-control shadow-none search-input me-3" type="search"  name="search" placeholder="Search" aria-label="Search"/>
+                <button type="button" class="btn ">
+                    Search
+                </button>
+               </div>
+               <div class="cart-icon" onclick="cartIcon()">
+                <i class="bi bi-cart3"> </i> 
+                <span class="cart-count">0 </span>
+               </div>
+                
+        </div>
+    </nav>
+    <section>
+        <div class="container mt-3">
+            <div class="row ">
+               
+                 <!-- <img src="asset/images.jpg" alt=""> -->  
+            </div>
+        </div>
+       
+    </section>
+
+ 
+<!-- Cart Sidebar -->
+<div class="cart-sidebar">
+    <span class="close-cart" onclick="closeCart()">✖</span>
+    <h4>Shopping Cart</h4>
+    <div class="cart-items"></div>
+</div>
+
+
+
+
+
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script>
+
+const searchInput = document.querySelector(".search-input");
+const searchButton = document.querySelector(".btn");
+
+const cards = document.querySelector(".row")
+const cartCount = document.querySelector(".cart-count");
+const cartItemsContainer = document.querySelector(".cart-items");
+const cartSidebar = document.querySelector(".cart-sidebar")
+
+
+
+function searchProducts() {
+    const searchValue = searchInput.value.toLowerCase();
+    fetch('https://fakestoreapi.com/products')
+        .then(res => res.json())
+        .then(result => {
+            let filteredProducts = result.filter(product => 
+                product.title.toLowerCase().includes(searchValue)
+            );
+            displayProducts(filteredProducts);
+        });
+}
+
+searchButton.addEventListener("click", searchProducts);
+
+
+
+function displayProducts(products) {
+    let productHTML = "";
+    products.forEach(product => {
+        productHTML += `
+            <div class="col col-lg-3 col-md-6 col-sm-12">
+                <div class="card p-3 border shadow-sm mb-3">
+                    <img src="${product.image}" alt="Product" class="img-product" onclick="getProduct(${product.id})">
+                    <h6 class="mt-2">${product.title.substring(0, 20)}...</h6>
+                    <p class="price">$${product.price}</p>
+                    <button class="cart-btn p-2" onclick="addToCart(${product.id}, '${product.title}', ${product.price}, '${product.image}')">Add to cart</button>
+                </div>
+            </div>
+        `;
+    });
+    cards.innerHTML = productHTML; 
+}
+
+
+function cartIcon () {
+    if (cartSidebar.style.right === "0px") {
+        cartSidebar.style.right = "-350px";
+    } else {
+        cartSidebar.style.right = "0px";
+        loadCart(); 
+    }
+};
+
+function closeCart () {
+    cartSidebar.style.right = "-350px";
+};
+
+function getCart() {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function addToCart(productId, productTitle, productPrice, productImage) {
+    let cart = getCart();
+    console.log(`cart data = ${cart}`)
+    let existingProduct = cart.find(element => element.id === productId);
+
+    if (existingProduct) {
+        existingProduct.quantity += 1;
+    } else {
+        cart.push({
+            id: productId,
+            title: productTitle,
+            price: productPrice,
+            image: productImage,
+            quantity: 1
+        });
+    }
+
+
+    localStorage.setItem("cart", JSON.stringify(cart)); 
+    updateCartCount();
+}
+
+function updateCartCount() {
+    const cart = getCart();
+    
+
+    cartCount.textContent = cart.length;
+    cartCount.style.display = cart.length > 0 ? "inline-block" : "none";
+}
+
+function loadCart() {
+    const cart = getCart();
+    cartItemsContainer.innerHTML = ""; 
+
+    cart.forEach(element => {
+        cartItemsContainer.innerHTML += `
+            <div class="cart-item">
+                <img src="${element.image}" alt="${element.title}">
+                <div>
+                    <h6 class="mb-2">${element.title}</h6>
+                    <p class="asidebar-price">$${element.price} x ${element.quantity}</p>
+                </div>
+            </div>
+        `;
+    });
+}
+
+const getAllProducts = () => { 
+    fetch('https://fakestoreapi.com/products')
+            .then(res=>res.json())
+            .then(result=> {
+                console.log(result)
+                let allProduct = result
+                let allImages =''
+                allProduct.forEach(element => {
+                    allImages+=  `
+                     <div class="col col-lg-3 col-md-6 col-sm-12">
+                 <div class="card p-3 border shadow-sm mb-3">
+                        <img src="${element.image}" alt="Product" class="img-product" onclick="getProduct(${element.id})">
+                        <h6 class="mt-2">${element.title.substring(0, 20)}...</h6>
+                        <p class="price">$${element.price}</p>
+                          <button class="cart-btn p-2" onclick="addToCart(${element.id}, '${element.title}', ${element.price}, '${element.image}')">Add to cart</button>
+
+                    </div>
+                </div>`
+                    
+                   
+                    
+                });
+                cards.innerHTML = allImages
+            });
+}
+
+const getProduct = (productId) => {
+    window.location.href = `product.html?id=${productId}`
+  };
+
+  updateCartCount() 
+getAllProducts();
+    </script>
+</body>
+</html>
