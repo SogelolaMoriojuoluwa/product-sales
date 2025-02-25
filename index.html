@@ -40,12 +40,11 @@
             background-color: #FDE68A;
         }
         .cart-icon {
-            position: relative;
             cursor: pointer;
             color: #F59E0B;
         }
         .cart-count {
-            position: absolute;
+            /* position: absolute; */
             top: -5px;
             right: -25px;
             background: #F59E0B;
@@ -121,27 +120,41 @@
             color: #F59E0B;
             font-family: "Atkinson Hyperlegible Next", serif;
         }
+        
+
+        
     </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg py-3">
-        <div class="container d-flex justify-content-between ">
-            <div>
-                <a href="#" class="navbar-brand">Shopping</a>
-            </div>
-               <div class="input-box d-flex">
-                <input class="form-control shadow-none search-input me-3" type="search"  name="search" placeholder="Search" aria-label="Search"/>
-                <button type="button" class="btn ">
-                    Search
-                </button>
-               </div>
-               <div class="cart-icon" onclick="cartIcon()">
-                <i class="bi bi-cart3"> </i> 
-                <span class="cart-count">0 </span>
-               </div>
+        <div class="container">
+        
+            <a href="#" class="navbar-brand">Shopping</a>
+    
+        
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+        
+                <form class="d-flex mx-auto mt-3 mt-lg-0 w-100" style="max-width: 500px;">
+                    <input class="form-control shadow-none search-input me-2" type="search" name="search" 
+                        placeholder="Search" aria-label="Search"/>
+                    <button type="button" class="btn">Search</button>
+                </form>
+    
                 
+                <div class="cart-icon position-relative mt-3 mt-lg-0" onclick="cartIcon()">
+                    <i class="bi bi-cart3"></i> 
+                    <span class="cart-count">0</span>
+                </div>
+            </div>
         </div>
     </nav>
+    
     <section>
         <div class="container mt-3">
             <div class="row ">

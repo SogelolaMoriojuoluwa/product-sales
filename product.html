@@ -25,20 +25,6 @@
         .navbar-brand:hover{
             color: #FDE68A;
         }
-        .input-box{
-            /* width: 400px; */
-            font-family: "Poppins", serif;
-        }
-        .btn{
-           color: #fff;
-            background-color: #F59E0B;
-            font-family: "Poppins", serif;
-        }
-        
-        .btn:hover{
-            cursor: pointer;
-            background-color: #FDE68A;
-        }
         .product-img{
             width: 400px;
             height: 400px;
@@ -89,6 +75,44 @@
             font-size: 12px;
             display: none;
         }
+
+        @media (max-width: 768px) {
+    .product-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .product-img {
+        margin-top: 20px;
+        width: 500px;
+        height: 500px;
+    }
+
+    .about {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .cart-icon {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 18px;
+    }
+
+    .product-img {
+        width: 100%;
+    }
+
+  
+
+    .product-info {
+        padding: 20px;
+    }
+}
         
     </style>
 </head>
@@ -166,8 +190,11 @@
 
                     if (!exists) {
                         product.quantity += 1;
-                        cart.push(product);
-                    } 
+                    } else {
+                product.quantity = 1;  
+                cart.push(product);
+            }
+
 
                     localStorage.setItem("cart", JSON.stringify(cart));
                     updateCartCount();
